@@ -7,17 +7,25 @@ export default function Home() {
 
   const { id } = useParams();
 
+  const token =" "
+
   useEffect(() => {
     loadUsers();
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get("http://localhost:8080/users");
+    const result = await axios.get("http://localhost:8080/users",
+      {
+        headers: {
+          "Access-Control-Allow-Origin": window.location.origin,
+        }
+      }
+    )
     setUsers(result.data);
   };
 
   const deleteUser = async (id) => {
-    await axios.delete(`http://localhost:8080/user/${id}`);
+    await axios.delete(`http://localhost:8080/user/${id}`)
     loadUsers();
   };
 
@@ -28,8 +36,6 @@ export default function Home() {
           <thead>
             <tr>
               <th scope="col">S.N</th>
-              <th scope="col">Name</th>
-              <th scope="col">Username</th>
               <th scope="col">Email</th>
               <th scope="col">Action</th>
             </tr>
@@ -40,8 +46,6 @@ export default function Home() {
                 <th scope="row" key={index}>
                   {index + 1}
                 </th>
-                <td>{user.name}</td>
-                <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>
                   <Link
